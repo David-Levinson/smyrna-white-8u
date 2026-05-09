@@ -21,29 +21,40 @@ def scrape():
         page.goto("https://web.gc.com/login", wait_until="networkidle", timeout=30000)
         time.sleep(3)
 
-        print("Page title:", page.title())
         print("Page URL:", page.url)
 
-        # Click the email field and type slowly like a real user
-        print("Filling email...")
-        email_field = page.wait_for_selector('input[name="email"]', timeout=10000)
-        email_field.click()
-        time.sleep(0.5)
-        page.keyboard.type(GC_EMAIL, delay=50)
+        # Use JavaScript to set React-controlled input value
+        print("Setting email via JavaScript...")
+        page.wait_for_selector('input[name="email"]', timeout=10000)
+        page.evaluate("""(email) => {
+            const input = document.querySelector('input[name="email"]');
+            const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set;
+            nativeInputValueSetter.call(input, email);
+            input.dispatchEvent(new Event('input', { bubbles: true }));
+            input.dispatchEvent(new Event('change', { bubbles: true }));
+        }""", GC_EMAIL)
         time.sleep(1)
+        page.screenshot(path="scraper/debug_login2.png")
 
         # Click Continue
         print("Clicking Continue...")
         page.click('button:has-text("Continue")')
-        time.sleep(4)
-        page.screenshot(path="scraper/debug_login2.png")
+        time.sleep(5)
+        page.screenshot(path="scraper/debug_login3.png")
 
-        # Now wait for password field
+        # Wait for password field
         print("Waiting for password field...")
         page.wait_for_selector('input[type="password"]', timeout=15000)
-        page.click('input[type="password"]')
-        time.sleep(0.5)
-        page.keyboard.type(GC_PASSWORD, delay=50)
+
+        # Set password via JavaScript too
+        print("Setting password via JavaScript...")
+        page.evaluate("""(pwd) => {
+            const input = document.querySelector('input[type="password"]');
+            const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set;
+            nativeInputValueSetter.call(input, pwd);
+            input.dispatchEvent(new Event('input', { bubbles: true }));
+            input.dispatchEvent(new Event('change', { bubbles: true }));
+        }""", GC_PASSWORD)
         time.sleep(1)
 
         # Submit
