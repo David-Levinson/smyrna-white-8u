@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smyrna White 8U All-Stars</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --navy: #0f1f3d;
+      --red:  #c8372d;
+      --gold: #e8a820;
+      --cream: #f7f3ec;
+      --muted: #8a8070;
+      --card-bg: #ffffff;
+      --border: #e2ddd4;
+      --text: #1a1612;
+      --text2: #5a5248;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Barlow', sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* HEADER */
+    header {
+      background: var(--navy);
+      padding: 1rem 1.25rem 0;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .header-top {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 0.75rem;
+    }
+    .logo { display: flex; align-items: center; gap: 10px; }
+    .logo-icon {
+      width: 36px; height: 36px; background: var(--red);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+    }
+    .logo-text { font-family: 'Barlow Condensed', sans-serif; font-size: 22px; font-weight: 700; color: #fff; letter-spacing: 0.02em; }
+    .logo-sub { font-size: 11px; color: var(--gold); letter-spacing: 0.08em; text-transform: uppercase; display: block; line-height: 1; }
+    .live-badge {
+      display: flex; align-items: center; gap: 5px;
+      font-size: 11px; color: #aab; letter-spacing: 0.05em;
+    }
+    .pulse { width: 6px; height: 6px; border-radius: 50%; background: #4caf50; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+    /* TABS */
+    .tabs {
+      display: flex; gap: 0; overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .tabs::-webkit-scrollbar { display: none; }
+    .tab {
+      flex-shrink: 0;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 14px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+      padding: 8px 18px; border: none; background: transparent;
+      color: #6a7a9a; cursor: pointer; border-bottom: 3px solid transparent;
+      transition: color .15s, border-color .15s;
+    }
+    .tab.active { color: #fff; border-bottom-color: var(--gold); }
+
+    /* CONTENT */
+    main { padding: 1.25rem; max-width: 680px; margin: 0 auto; }
+    .pane { display: none; }
+    .pane.active { display: block; }
+
+    /* PRIORITY CARDS */
+    .section-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 10px;
+    }
+    .section { margin-bottom: 1.5rem; }
+    .priority {
+      border-radius: 6px; padding: 0.8rem 1rem; margin-bottom: 8px;
+      border-left: 4px solid;
+    }
+    .priority.urgent { background: #fff3f0; border-color: var(--red); }
+    .priority.info   { background: #eff5ff; border-color: #3a7bd5; }
+    .priority.ok     { background: #f0f9f0; border-color: #3a9a3a; }
+    .ptag {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 2px 7px; border-radius: 20px; display: inline-block; margin-bottom: 5px;
+    }
+    .priority.urgent .ptag { background: #ffd4cc; color: #8b2218; }
+    .priority.info   .ptag { background: #cce0ff; color: #1a4d99; }
+    .priority.ok     .ptag { background: #ccf0cc; color: #1a661a; }
+    .ptitle { font-size: 14px; font-weight: 500; margin-bottom: 3px; }
+    .priority.urgent .ptitle { color: #5a1a12; }
+    .priority.info   .ptitle { color: #0d2d5e; }
+    .priority.ok     .ptitle { color: #0d3d0d; }
+    .pbody { font-size: 13px; line-height: 1.5; }
+    .priority.urgent .pbody { color: #8b3a30; }
+    .priority.info   .pbody { color: #2a5090; }
+    .priority.ok     .pbody { color: #2a6a2a; }
+
+    /* STAT ROW */
+    .stat-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 1.5rem; }
+    .stat-box { background: var(--navy); border-radius: 8px; padding: 0.9rem 1rem; text-align: center; }
+    .stat-num { font-family: 'Barlow Condensed', sans-serif; font-size: 26px; font-weight: 700; color: var(--gold); }
+    .stat-lbl { font-size: 11px; color: #8899bb; text-transform: uppercase; letter-spacing: 0.06em; }
+
+    /* CARD */
+    .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.25rem; margin-bottom: 1rem; }
+
+    /* MAP + UNIFORM PILLS */
+    .pill-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+    .map-btn {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 12px; font-weight: 500;
+      background: var(--navy); color: #fff;
+      padding: 4px 12px; border-radius: 20px; text-decoration: none;
+    }
+    .map-btn:hover { background: #1a3060; }
+    .uni-pill {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 12px; font-weight: 500;
+      padding: 4px 12px; border-radius: 20px;
+    }
+    .uni-blue  { background: #ddeeff; color: #0d3d88; }
+    .uni-white { background: #f0f0f0; color: #333; border: 1px solid #ccc; }
+    .uni-gray  { background: #e0e0e0; color: #333; }
+
+    /* SCHEDULE ROWS */
+    .sched-row {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 12px 0; border-bottom: 1px solid var(--border);
+    }
+    .sched-row:last-child { border-bottom: none; }
+    .date-box {
+      width: 44px; flex-shrink: 0; text-align: center;
+      background: var(--navy); border-radius: 8px; padding: 4px 2px;
+    }
+    .date-mon { font-size: 10px; color: var(--gold); text-transform: uppercase; letter-spacing: 0.06em; }
+    .date-day { font-size: 20px; font-weight: 700; color: #fff; line-height: 1; font-family: 'Barlow Condensed', sans-serif; }
+    .sched-info { flex: 1; }
+    .sched-opp { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 2px; }
+    .sched-det { font-size: 12px; color: var(--text2); margin-bottom: 4px; }
+    .badge {
+      font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px;
+      flex-shrink: 0; margin-top: 2px; font-family: 'Barlow Condensed', sans-serif;
+      letter-spacing: 0.04em; text-transform: uppercase;
+    }
+    .badge.home     { background: #e8f5e8; color: #1a5c1a; }
+    .badge.away     { background: #e8eeff; color: #1a3a8a; }
+    .badge.next     { background: var(--red); color: #fff; }
+    .badge.playoff  { background: var(--gold); color: var(--navy); }
+
+    /* ROSTER */
+    .roster-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .player {
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: 10px; padding: 10px; cursor: pointer;
+      transition: border-color .15s;
+    }
+    .player:hover { border-color: var(--navy); }
+    .player.open { grid-column: span 2; border-color: var(--navy); }
+    .player-top { display: flex; align-items: center; gap: 10px; }
+    .num {
+      width: 38px; height: 38px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 700;
+      flex-shrink: 0;
+    }
+    .pname { font-size: 13px; font-weight: 500; color: var(--text); }
+    .pparen { font-size: 11px; color: var(--text2); }
+    .pos {
+      font-size: 10px; padding: 1px 6px; border-radius: 10px;
+      background: var(--navy); color: var(--gold);
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 600;
+      letter-spacing: 0.04em; display: inline-block; margin-top: 2px;
+    }
+    .stats-grid {
+      display: none; margin-top: 10px; padding-top: 10px;
+      border-top: 1px solid var(--border);
+      grid-template-columns: repeat(4, 1fr); gap: 8px;
+    }
+    .player.open .stats-grid { display: grid; }
+    .sval { font-family: 'Barlow Condensed', sans-serif; font-size: 22px; font-weight: 700; color: var(--navy); text-align: center; }
+    .slbl { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; text-align: center; }
+
+    /* RESULTS */
+    .recap-block { background: #f7f3ec; border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 8px; }
+    .recap-inn { font-size: 10px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; font-family: 'Barlow Condensed', sans-serif; }
+    .recap-txt { font-size: 13px; color: var(--text); line-height: 1.55; }
+    .score-chip { display: inline-block; font-size: 11px; font-weight: 600; padding: 1px 8px; border-radius: 10px; margin-left: 5px; }
+    .win-chip  { background: #d4f0d4; color: #1a5c1a; }
+    .loss-chip { background: #ffd4cc; color: #8b2218; }
+    .result-score { font-family: 'Barlow Condensed', sans-serif; font-size: 15px; font-weight: 700; flex-shrink: 0; }
+    .result-score.w { color: #1a6a1a; }
+    .result-score.l { color: var(--red); }
+
+    /* KNOW */
+    .know {
+      border-left: 4px solid; border-radius: 0 8px 8px 0;
+      padding: 0.8rem 1rem; margin-bottom: 8px;
+    }
+    .know.purple { border-color: #6a4bb5; background: #f3efff; }
+    .know.teal   { border-color: #0f8a70; background: #e8f8f3; }
+    .know.amber  { border-color: #c07a10; background: #fff5e0; }
+    .know.pink   { border-color: #b54070; background: #fff0f5; }
+    .know .ktag  { font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding: 2px 7px; border-radius: 20px; display: inline-block; margin-bottom: 5px; }
+    .know.purple .ktag { background: #dcd0ff; color: #3a2080; }
+    .know.teal   .ktag { background: #b8edd8; color: #0a5a44; }
+    .know.amber  .ktag { background: #ffe8a0; color: #7a4a00; }
+    .know.pink   .ktag { background: #ffc8dc; color: #7a1a40; }
+    .know .ktitle { font-size: 14px; font-weight: 500; margin-bottom: 3px; }
+    .know.purple .ktitle { color: #2d1870; }
+    .know.teal   .ktitle { color: #093d30; }
+    .know.amber  .ktitle { color: #5a3800; }
+    .know.pink   .ktitle { color: #5a0d28; }
+    .know .kbody { font-size: 13px; line-height: 1.55; }
+    .know.purple .kbody { color: #4a3090; }
+    .know.teal   .kbody { color: #1a6050; }
+    .know.amber  .kbody { color: #7a5010; }
+    .know.pink   .kbody { color: #8a2050; }
+
+    .footer { text-align: center; font-size: 11px; color: var(--muted); padding: 2rem 0 1rem; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-top">
+    <div class="logo">
+      <div class="logo-icon">⚾</div>
+      <div>
+        <span class="logo-text">Smyrna White</span>
+        <span class="logo-sub">8U All-Stars · Spring 2026</span>
+      </div>
+    </div>
+    <div class="live-badge"><div class="pulse"></div> Live</div>
+  </div>
+  <div class="tabs">
+    <button class="tab active" onclick="show('today',this)">Today</button>
+    <button class="tab" onclick="show('schedule',this)">Schedule</button>
+    <button class="tab" onclick="show('roster',this)">Roster</button>
+    <button class="tab" onclick="show('results',this)">Results</button>
+    <button class="tab" onclick="show('know',this)">Need to Know</button>
+  </div>
+</header>
+
+<main>
+
+  <!-- TODAY -->
+  <div class="pane active" id="pane-today">
+    <br>
+    <div class="section">
+      <div class="section-label">What's important today</div>
+      <div class="priority urgent">
+        <div class="ptag">Action needed</div>
+        <div class="ptitle">Game tomorrow — Marietta Blue Jays, 6:00 PM</div>
+        <div class="pbody">Home game at Smyrna Park Field 2. Arrive by 5:30 for warmups.
+          <div class="pill-row">
+            <a class="map-btn" href="https://maps.google.com/?q=Smyrna+Park+Field+2+Smyrna+GA">📍 Get directions</a>
+            <span class="uni-pill uni-blue">👕 Blue jerseys + white pants</span>
+          </div>
+        </div>
+      </div>
+      <div class="priority info">
+        <div class="ptag">Reminder</div>
+        <div class="ptitle">Snack duty this week: Rodriguez family</div>
+        <div class="pbody">Post-game snacks needed for ~15 kids. Coordinate with Lisa Rodriguez.</div>
+      </div>
+      <div class="priority ok">
+        <div class="ptag">All good</div>
+        <div class="ptitle">Thursday practice still on — Glover Park, 5:30 PM</div>
+        <div class="pbody">No cancellations. Coach focusing on pitching rotation.
+          <div class="pill-row">
+            <a class="map-btn" href="https://maps.google.com/?q=Glover+Park+Smyrna+GA">📍 Get directions</a>
+            <span class="uni-pill uni-gray">👕 Practice jersey</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat-box"><div class="stat-num">8–3</div><div class="stat-lbl">Record</div></div>
+      <div class="stat-box"><div class="stat-num">Sat</div><div class="stat-lbl">Next game</div></div>
+      <div class="stat-box"><div class="stat-num">2nd</div><div class="stat-lbl">Division</div></div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Latest from Coach Mike</div>
+      <div class="card">
+        <div style="font-size:12px;color:var(--muted);margin-bottom:6px;">May 8 · via Gmail</div>
+        <div style="font-size:14px;line-height:1.6;">"Great practice Tuesday — the boys are looking sharp. Remember tomorrow's game is home, 6 PM. Big one before playoffs. Let's pack those bleachers!"</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCHEDULE -->
+  <div class="pane" id="pane-schedule">
+    <br>
+    <div class="section">
+      <div class="section-label">Upcoming games</div>
+      <div class="card" style="padding:0.5rem 1.25rem;">
+        <div class="sched-row">
+          <div class="date-box"><div class="date-mon">May</div><div class="date-day">10</div></div>
+          <div class="sched-info">
+            <div class="sched-opp">vs. Marietta Blue Jays</div>
+            <div class="sched-det">⏰ 6:00 PM · Smyrna Park Field 2</div>
+            <div class="pill-row">
+              <a class="map-btn" href="https://maps.google.com/?q=Smyrna+Park+Field+2+Smyrna+GA">📍 Directions</a>
+              <span class="uni-pill uni-blue">👕 Blue + white pants</span>
+            </div>
+          </div>
+          <span class="badge next">Tomorrow</span>
+        </div>
+        <div class="sched-row">
+          <div class="date-box"><div class="date-mon">May</div><div class="date-day">15</div></div>
+          <div class="sched-info">
+            <div class="sched-opp">@ East Cobb Cardinals</div>
+            <div class="sched-det">⏰ 5:30 PM · East Cobb Park</div>
+            <div class="pill-row">
+              <a class="map-btn" href="https://maps.google.com/?q=East+Cobb+Park+Marietta+GA">📍 Directions</a>
+              <span class="uni-pill uni-white">👕 White jerseys + gray pants</span>
+            </div>
+          </div>
+          <span class="badge away">Away</span>
+        </div>
+        <div class="sched-row">
+          <div class="date-box"><div class="date-mon">May</div><div class="date-day">17</div></div>
+          <div class="sched-info">
+            <div class="sched-opp">vs. Kennesaw Cubs</div>
+            <div class="sched-det">⏰ 6:00 PM · Smyrna Park Field 1</div>
+            <div class="pill-row">
+              <a class="map-btn" href="https://maps.google.com/?q=Smyrna+Park+Field+1+Smyrna+GA">📍 Directions</a>
+              <span class="uni-pill uni-blue">👕 Blue + white pants</span>
+            </div>
+          </div>
+          <span class="badge home">Home</span>
+        </div>
+        <div class="sched-row">
+          <div class="date-box"><div class="date-mon">May</div><div class="date-day">22</div></div>
+          <div class="sched-info">
+            <div class="sched-opp">vs. Acworth Braves</div>
+            <div class="sched-det">⏰ 5:30 PM · Smyrna Park Field 2</div>
+            <div class="pill-row">
+              <a class="map-btn" href="https://maps.google.com/?q=Smyrna+Park+Field+2+Smyrna+GA">📍 Directions</a>
+              <span class="uni-pill uni-blue">👕 Blue + white pants</span>
+            </div>
+          </div>
+          <span class="badge home">Home</span>
+        </div>
+        <div class="sched-row">
+          <div class="date-box"><div class="date-mon">May</div><div class="date-day">29</div></div>
+          <div class="sched-info">
+            <div class="sched-opp">Playoff Round 1 — TBD</div>
+            <div class="sched-det">⏰ Location & time TBD</div>
+            <div class="pill-row"><span class="uni-pill uni-blue">👕 Blue + white pants</span></div>
+          </div>
+          <span class="badge playoff">Playoffs</span>
+        </div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-label">Practice</div>
+      <div class="card">
+        <div style="font-size:14px;font-weight:500;margin-bottom:4px;">Every Tuesday & Thursday · 5:30 PM</div>
+        <div style="font-size:13px;color:var(--text2);margin-bottom:8px;">Glover Park, Field 3</div>
+        <div class="pill-row">
+          <a class="map-btn" href="https://maps.google.com/?q=Glover+Park+Smyrna+GA">📍 Directions</a>
+          <span class="uni-pill uni-gray">👕 Practice jersey</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROSTER -->
+  <div class="pane" id="pane-roster">
+    <br>
+    <div class="section">
+      <div class="section-label">Tap a player for season stats</div>
+      <div class="roster-grid" id="roster">
+        <div class="player" onclick="togglePlayer(this)">
+          <div class="player-top">
+            <div class="num" style="background:#e8eeff;color:#0f1f3d;">#4</div>
+            <div><div class="pname">Jake Thompson</div><div class="pparen">Sarah & Tom Thompson</div><div class="pos">SS</div></div>
+          </div>
+          <div class="stats-grid">
+            <div><div class="sval">.342</div><div class="slbl">AVG</div></div>
+            <div><div class="sval">3</div><div class="slbl">HR</div></div>
+            <div><div class="sval">14</div><div class="slbl">RBI</div></div>
+            <div><div class="sval">9</div><div class="slbl">SB</div></div>
+          </div>
+        </div>
+        <div class="player" onclick="togglePlayer(this)">
+          <div class="player-top">
+            <div class="num" style="background:#ffe8d0;color:#7a3000;">#7</div>
+            <div><div class="pname">Marcus Williams</div><div class="pparen">Denise Williams</div><div class="pos">P / CF</div></div>
+          </div>
+          <div class="stats-grid">
+            <div><div class="sval">.310</div><div class="slbl">AVG</div></div>
+            <div><div class="sval">1</div><div class="slbl">HR</div></div>
+            <div><div class="sval">11</div><div class="slbl">RBI</div></div>
+            <div><div class="sval">2.10</div><div class="slbl">ERA</div></div>
+          </div>
+        </div>
+        <div class="player" onclick="togglePlayer(this)">
+          <div class="player-top">
+            <div class="num" style="background:#ffe8e8;color:#8b0000;">#11</div>
+            <div><div class="pname">Connor Rodriguez</div><div class="pparen">Lisa & Dave Rodriguez</div><div class="pos">1B</div></div>
+          </div>
+          <div class="stats-grid">
+            <div><div class="sval">.287</div><div class="slbl">AVG</div></div>
+            <div><div class="sval">2</div><div class="slbl">HR</div></div>
+            <div><div class="sval">18</div><div class="slbl">RBI</div></div>
+            <div><div class="sval">4</div><div class="slbl">SB</div></div>
+          </div>
+        </div>
+        <div class="player" onclick="togglePlayer(this)">
+          <div class="player-top">
+            <div class="num" style="background:#e8f5e8;color:#1a5c1a;">#2</div>
+            <div><div class="pname">Eli Patterson</div><div class="pparen">James Patterson</div><div class="pos">C</div></div>
+          </div>
+          <div class="stats-grid">
+            <div><div class="sval">.265</div><div class="slbl">AVG</div></div>
+            <div><div class="sval">0</div><div class="slbl">HR</div></div>
+            <div><div class="sval">9</div><div class="slbl">RBI</div></div>
+            <div><div class="sval">6</div><div class="slbl">SB</div></div>
+          </div>
+        </div>
+        <div class="player" onclick="togglePlayer(this)">
+          <div class="player-top">
+            <div class="num" style="background:#fff8e0;color:#7a5a00;">#9</div>
+            <div><div class="pname">Noah Kim</div><div class="pparen">Grace & Paul Kim</div><div class="pos">2B / P</div></div>
+          </div>
+          <div class="stats-grid">
+            <div><div class="sval">.321</div><div class="slbl">AVG</div></div>
+            <div><div class="sval">1</div><div class="slbl">HR</div></div>
+            <div><div class="sval">12</div><div class="slbl">RBI</div></div>
+            <div><div class="sval">2.75</div><div class="slbl">ERA</div></div>
+          </div>
+        </div>
+        <div class="player" onclick="togglePlayer(this)">
+          <div class="player-top">
+            <div class="num" style="background:#f0e8ff;color:#4a1a8a;">#14</div>
+            <div><div class="pname">Tyler Brooks</div><div class="pparen">Amanda Brooks</div><div class="pos">3B</div></div>
+          </div>
+          <div class="stats-grid">
+            <div><div class="sval">.299</div><div class="slbl">AVG</div></div>
+            <div><div class="sval">1</div><div class="slbl">HR</div></div>
+            <div><div class="sval">10</div><div class="slbl">RBI</div></div>
+            <div><div class="sval">7</div><div class="slbl">SB</div></div>
+          </div>
+        </div>
+        <div class="player" onclick="togglePlayer(this)">
+          <div class="player-top">
+            <div class="num" style="background:#e0f5f5;color:#0a5050;">#1</div>
+            <div><div class="pname">Jaylen Carter</div><div class="pparen">Monica & Ray Carter</div><div class="pos">LF</div></div>
+          </div>
+          <div class="stats-grid">
+            <div><div class="sval">.278</div><div class="slbl">AVG</div></div>
+            <div><div class="sval">0</div><div class="slbl">HR</div></div>
+            <div><div class="sval">8</div><div class="slbl">RBI</div></div>
+            <div><div class="sval">11</div><div class="slbl">SB</div></div>
+          </div>
+        </div>
+        <div class="player" onclick="togglePlayer(this)">
+          <div class="player-top">
+            <div class="num" style="background:#ffe8f0;color:#8a0a40;">#6</div>
+            <div><div class="pname">Aiden Patel</div><div class="pparen">Priya & Sam Patel</div><div class="pos">RF</div></div>
+          </div>
+          <div class="stats-grid">
+            <div><div class="sval">.244</div><div class="slbl">AVG</div></div>
+            <div><div class="sval">0</div><div class="slbl">HR</div></div>
+            <div><div class="sval">6</div><div class="slbl">RBI</div></div>
+            <div><div class="sval">5</div><div class="slbl">SB</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="pane" id="pane-results">
+    <br>
+    <div class="section">
+      <div class="section-label">Most recent — May 6 vs. Smyrna Reds · W 7–2</div>
+      <div class="card">
+        <div style="font-size:13px;font-weight:500;color:var(--text);margin-bottom:10px;">AI game recap · generated from GameChanger play-by-play</div>
+        <div class="recap-block">
+          <div class="recap-inn">1st inning</div>
+          <div class="recap-txt">Marcus Williams opened with a leadoff double, then scored on a Connor Rodriguez RBI single to put the Sluggers up early. <span class="score-chip win-chip">1–0</span></div>
+        </div>
+        <div class="recap-block">
+          <div class="recap-inn">3rd inning</div>
+          <div class="recap-txt">Jake Thompson crushed a 2-run homer to left-center — his 3rd of the season — extending the lead. Noah Kim added an RBI groundout. <span class="score-chip win-chip">4–1</span></div>
+        </div>
+        <div class="recap-block">
+          <div class="recap-inn">5th inning</div>
+          <div class="recap-txt">The Reds cut it to 4–2 on a wild pitch, but Jaylen Carter answered with a steal and scored on a Tyler Brooks single. <span class="score-chip win-chip">5–2</span></div>
+        </div>
+        <div class="recap-block">
+          <div class="recap-inn">6th inning</div>
+          <div class="recap-txt">Marcus held the Reds scoreless over two innings. Eli Patterson and Aiden Patel added insurance runs to seal the win. <strong>Final: Sluggers 7, Reds 2.</strong> <span class="score-chip win-chip">7–2 Final ✓</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-label">Full season results</div>
+      <div class="card" style="padding:0.5rem 1.25rem;">
+        <div class="sched-row">
+          <div class="date-box"><div class="date-mon">May</div><div class="date-day">6</div></div>
+          <div class="sched-info"><div class="sched-opp">vs. Smyrna Reds</div><div class="sched-det">Home</div></div>
+          <div class="result-score w">W 7–2</div>
+        </div>
+        <div class="sched-row">
+          <div class="date-box"><div class="date-mon">May</div><div class="date-day">1</div></div>
+          <div class="sched-info"><div class="sched-opp">@ Kennesaw Cubs</div><div class="sched-det">Away</div></div>
+          <div class="result-score w">W 5–3</div>
+        </div>
+        <div class="sched-row">
+          <div class="date-box"><div class="date-mon">Apr</div><div class="date-day">26</div></div>
+          <div class="sched-info"><div class="sched-opp">vs. East Cobb Cardinals</div><div class="sched-det">Home</div></div>
+          <div class="result-score l">L 3–6</div>
+        </div>
+        <div class="sched-row">
+          <div class="date-box"><div class="date-mon">Apr</div><div class="date-day">22</div></div>
+          <div class="sched-info"><div class="sched-opp">@ Acworth Braves</div><div class="sched-det">Away</div></div>
+          <div class="result-score w">W 9–4</div>
+        </div>
+        <div class="sched-row">
+          <div class="date-box"><div class="date-mon">Apr</div><div class="date-day">17</div></div>
+          <div class="sched-info"><div class="sched-opp">vs. Marietta Blue Jays</div><div class="sched-det">Home</div></div>
+          <div class="result-score w">W 4–1</div>
+        </div>
+        <div class="sched-row">
+          <div class="date-box"><div class="date-mon">Apr</div><div class="date-day">12</div></div>
+          <div class="sched-info"><div class="sched-opp">@ Smyrna Reds</div><div class="sched-det">Away</div></div>
+          <div class="result-score l">L 2–5</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NEED TO KNOW -->
+  <div class="pane" id="pane-know">
+    <br>
+    <div class="section">
+      <div class="section-label">Team essentials</div>
+      <div class="know purple">
+        <div class="ktag">Uniforms</div>
+        <div class="ktitle">Uniform rules for the season</div>
+        <div class="kbody">Home games: blue jersey + white pants + blue socks. Away games: white jersey + gray pants + blue socks. Practice: any practice jersey + athletic pants. No metal cleats — rubber or molded only.</div>
+      </div>
+      <div class="know teal">
+        <div class="ktag">Communication</div>
+        <div class="ktitle">How the team communicates</div>
+        <div class="kbody">Coach Mike emails all updates to the team list. Last-minute changes come via text. This page updates automatically within minutes of any email or text going out — always check here first.</div>
+      </div>
+      <div class="know amber">
+        <div class="ktag">Weather policy</div>
+        <div class="ktitle">Game & practice cancellations</div>
+        <div class="kbody">Games cancelled if lightning is within 8 miles or field is unplayable. Coach Mike will text by 3 PM for evening events. This page will show a red CANCELLED banner at the top if anything changes.</div>
+      </div>
+      <div class="know pink">
+        <div class="ktag">Snack schedule</div>
+        <div class="ktitle">Post-game snack rotation</div>
+        <div class="kbody">Each family is responsible for one post-game snack for ~15 kids. The order follows the roster list top to bottom. The schedule tab will flag your week automatically.</div>
+      </div>
+      <div class="know purple">
+        <div class="ktag">Playoffs</div>
+        <div class="ktitle">Playoff format & eligibility</div>
+        <div class="kbody">Top 6 teams advance. Single elimination starting May 29. Players must have appeared in at least 4 regular season games to be eligible. We're currently 2nd in the division.</div>
+      </div>
+      <div class="know teal">
+        <div class="ktag">Volunteering</div>
+        <div class="ktitle">Ways to help out</div>
+        <div class="kbody">We need scorekeepers, field prep volunteers (arrive 30 min early), and a team photographer. Reply to any team email or talk to Coach Mike if you can help.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">Smyrna White 8U All-Stars · Updated automatically from Gmail & GameChanger</div>
+</main>
+
+<script>
+function show(name, btn) {
+  document.querySelectorAll('.pane').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('pane-' + name).classList.add('active');
+  btn.classList.add('active');
+}
+function togglePlayer(el) {
+  const isOpen = el.classList.contains('open');
+  document.querySelectorAll('.player').forEach(p => p.classList.remove('open'));
+  if (!isOpen) el.classList.add('open');
+}
+</script>
+</body>
+</html>
