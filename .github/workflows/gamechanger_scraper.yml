@@ -48,4 +48,4 @@ jobs:
           git config user.email "bot@smyrna-white-8u.com"
           git add scraper/gc_data.json
           git diff --staged --quiet || git commit -m "Auto: GameChanger data update"
-          git push https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/chrisroberts7577/smyrna-white-8u.git
+          git push https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/David-Levinson/smyrna-white-8u.git
