@@ -1,0 +1,40 @@
+name: GameChanger_Scraper
+
+on:
+  schedule:
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install playwright beautifulsoup4 requests
+          playwright install chromium
+          playwright install-deps chromium
+
+      - name: Run GameChanger scraper
+        env:
+          GC_EMAIL:    ${{ secrets.GC_EMAIL }}
+          GC_PASSWORD: ${{ secrets.GC_PASSWORD }}
+          GH_TOKEN:    ${{ secrets.GH_TOKEN }}
+        run: python scraper/gc_scraper.py
+
+      - name: Commit updated data
+        run: |
+          git config user.name  "GC Scraper Bot"
+          git config user.email "bot@smyrna-white-8u.com"
+          git add scraper/gc_data.json
+          git diff --staged --quiet || git commit -m "Auto: GameChanger data update"
+          git push https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/chrisroberts7577/smyrna-white-8u.git
