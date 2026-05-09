@@ -21,44 +21,34 @@ def scrape():
         page.goto("https://web.gc.com/login", wait_until="networkidle", timeout=30000)
         time.sleep(3)
 
-        # Take screenshot to see what the page looks like
-        page.screenshot(path="scraper/debug_login.png")
         print("Page title:", page.title())
         print("Page URL:", page.url)
 
-        # Print all input fields found
-        inputs = page.query_selector_all('input')
-        print(f"Found {len(inputs)} input fields:")
-        for inp in inputs:
-            print(f"  - type={inp.get_attribute('type')} name={inp.get_attribute('name')} placeholder={inp.get_attribute('placeholder')}")
-
-        # Fill email
+        # Click the email field and type slowly like a real user
         print("Filling email...")
-        page.fill('input[type="email"], input[name="email"], input[placeholder*="email" i], input[placeholder*="Email" i]', GC_EMAIL)
+        email_field = page.wait_for_selector('input[name="email"]', timeout=10000)
+        email_field.click()
+        time.sleep(0.5)
+        page.keyboard.type(GC_EMAIL, delay=50)
         time.sleep(1)
 
-        # Click Next/Continue if two-step login
-        next_btn = page.query_selector('button:has-text("Next"), button:has-text("Continue"), button:has-text("next")')
-        if next_btn:
-            print("Two-step login detected — clicking Next...")
-            next_btn.click()
-            time.sleep(3)
-            page.screenshot(path="scraper/debug_login2.png")
+        # Click Continue
+        print("Clicking Continue...")
+        page.click('button:has-text("Continue")')
+        time.sleep(4)
+        page.screenshot(path="scraper/debug_login2.png")
 
-        # Fill password
-        print("Filling password...")
+        # Now wait for password field
+        print("Waiting for password field...")
         page.wait_for_selector('input[type="password"]', timeout=15000)
-        page.fill('input[type="password"]', GC_PASSWORD)
+        page.click('input[type="password"]')
+        time.sleep(0.5)
+        page.keyboard.type(GC_PASSWORD, delay=50)
         time.sleep(1)
 
         # Submit
-        print("Submitting login...")
-        submit = page.query_selector('button[type="submit"], button:has-text("Sign in"), button:has-text("Log in"), button:has-text("Sign In")')
-        if submit:
-            submit.click()
-        else:
-            page.keyboard.press("Enter")
-
+        print("Submitting...")
+        page.click('button[type="submit"], button:has-text("Sign in"), button:has-text("Log in"), button:has-text("Continue")')
         page.wait_for_load_state("networkidle", timeout=20000)
         time.sleep(4)
 
