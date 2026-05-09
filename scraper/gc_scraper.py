@@ -3,11 +3,10 @@ import json
 import time
 from playwright.sync_api import sync_playwright
 
-GC_EMAIL    = os.environ["GC_EMAIL"]
-GC_PASSWORD = os.environ["GC_PASSWORD"]
-TEAM_ID     = "vLOFzQgEgjIp"
-TEAM_URL    = f"https://web.gc.com/teams/{TEAM_ID}/2026-summer-smyrna-white-8u---2026"
-OUTPUT_FILE = "scraper/gc_data.json"
+GC_AUTH_TOKEN = os.environ["GC_AUTH_TOKEN"]
+TEAM_ID       = "vLOFzQgEgjIp"
+TEAM_URL      = f"https://web.gc.com/teams/{TEAM_ID}/2026-summer-smyrna-white-8u---2026"
+OUTPUT_FILE   = "scraper/gc_data.json"
 
 def scrape():
     with sync_playwright() as p:
@@ -15,61 +14,25 @@ def scrape():
         context = browser.new_context(
             user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120 Safari/537.36"
         )
+
+        # Inject the auth token directly into localStorage before any page loads
         page = context.new_page()
+        page.goto("https://web.gc.com", wait_until="networkidle", timeout=30000)
+        time.sleep(2)
 
-        print("Navigating to GameChanger login...")
-        page.goto("https://web.gc.com/login", wait_until="networkidle", timeout=30000)
-        time.sleep(3)
-
-        print("Page URL:", page.url)
-
-        # Use JavaScript to set React-controlled input value
-        print("Setting email via JavaScript...")
-        page.wait_for_selector('input[name="email"]', timeout=10000)
-        page.evaluate("""(email) => {
-            const input = document.querySelector('input[name="email"]');
-            const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set;
-            nativeInputValueSetter.call(input, email);
-            input.dispatchEvent(new Event('input', { bubbles: true }));
-            input.dispatchEvent(new Event('change', { bubbles: true }));
-        }""", GC_EMAIL)
-        time.sleep(1)
-        page.screenshot(path="scraper/debug_login2.png")
-
-        # Click Continue
-        print("Clicking Continue...")
-        page.click('button:has-text("Continue")')
-        time.sleep(5)
-        page.screenshot(path="scraper/debug_login3.png")
-
-        # Wait for password field
-        print("Waiting for password field...")
-        page.wait_for_selector('input[type="password"]', timeout=15000)
-
-        # Set password via JavaScript too
-        print("Setting password via JavaScript...")
-        page.evaluate("""(pwd) => {
-            const input = document.querySelector('input[type="password"]');
-            const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set;
-            nativeInputValueSetter.call(input, pwd);
-            input.dispatchEvent(new Event('input', { bubbles: true }));
-            input.dispatchEvent(new Event('change', { bubbles: true }));
-        }""", GC_PASSWORD)
+        print("Injecting auth token...")
+        page.evaluate(f"""() => {{
+            localStorage.setItem('eden-auth-tokens', '{GC_AUTH_TOKEN}');
+        }}""")
         time.sleep(1)
 
-        # Submit
-        print("Submitting...")
-        page.click('button[type="submit"], button:has-text("Sign in"), button:has-text("Log in"), button:has-text("Continue")')
-        page.wait_for_load_state("networkidle", timeout=20000)
-        time.sleep(4)
-
-        print("Post-login URL:", page.url)
-        page.screenshot(path="scraper/debug_postlogin.png")
-
+        # Now navigate to the team page — should be logged in
         print("Navigating to team page...")
         page.goto(TEAM_URL, wait_until="networkidle", timeout=30000)
         time.sleep(4)
         page.screenshot(path="scraper/debug_team.png")
+        print("Team page URL:", page.url)
+        print("Team page title:", page.title())
 
         data = {
             "roster":   scrape_roster(page),
@@ -87,6 +50,7 @@ def scrape_roster(page):
         page.goto(f"https://web.gc.com/teams/{TEAM_ID}/2026-summer-smyrna-white-8u---2026/roster",
                   wait_until="networkidle", timeout=20000)
         time.sleep(3)
+        page.screenshot(path="scraper/debug_roster.png")
         players = []
         rows = page.query_selector_all('[class*="player"], [class*="roster"] [class*="row"], [class*="PlayerCard"], li[class*="player"]')
         print(f"Found {len(rows)} player elements")
@@ -109,6 +73,7 @@ def scrape_schedule(page):
         page.goto(f"https://web.gc.com/teams/{TEAM_ID}/2026-summer-smyrna-white-8u---2026/schedule",
                   wait_until="networkidle", timeout=20000)
         time.sleep(3)
+        page.screenshot(path="scraper/debug_schedule.png")
         games = []
         rows = page.query_selector_all('[class*="game"], [class*="event"], [class*="Game"], [class*="schedule"] li')
         print(f"Found {len(rows)} schedule elements")
@@ -145,6 +110,7 @@ def scrape_stats(page):
         page.goto(f"https://web.gc.com/teams/{TEAM_ID}/2026-summer-smyrna-white-8u---2026/stats",
                   wait_until="networkidle", timeout=20000)
         time.sleep(3)
+        page.screenshot(path="scraper/debug_stats.png")
         rows = page.query_selector_all('table tr, [class*="stat"], [class*="player-stat"]')
         stats = []
         for row in rows:
@@ -168,4 +134,4 @@ if __name__ == "__main__":
     with open(OUTPUT_FILE, "w") as f:
         json.dump(data, f, indent=2)
     print(f"Data saved to {OUTPUT_FILE}")
-    print(json.dumps(data, indent=2)[:2000])
+    print(json.dumps(data, indent=2)[:3000])
