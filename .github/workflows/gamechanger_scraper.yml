@@ -29,9 +29,10 @@ jobs:
 
       - name: Run GameChanger scraper
         env:
-          GC_EMAIL:    ${{ secrets.GC_EMAIL }}
-          GC_PASSWORD: ${{ secrets.GC_PASSWORD }}
-          GH_TOKEN:    ${{ secrets.GH_TOKEN }}
+          GC_EMAIL:      ${{ secrets.GC_EMAIL }}
+          GC_PASSWORD:   ${{ secrets.GC_PASSWORD }}
+          GC_AUTH_TOKEN: ${{ secrets.GC_AUTH_TOKEN }}
+          GH_TOKEN:      ${{ secrets.GH_TOKEN }}
         run: python scraper/gc_scraper.py
 
       - name: Upload debug screenshots
