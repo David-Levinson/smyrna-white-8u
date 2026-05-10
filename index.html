@@ -256,9 +256,10 @@
     <div class="section">
       <div class="section-label">Latest from Coach Corey</div>
       <!-- AUTO:TODAY_START -->
-<div class="priority urgent"><div class="ptag">Action needed</div><div class="ptitle">Practice Today</div><div class="pbody">Today at 4:00 PM — Legion Field. Wear grey pants + practice shirt.</div></div>
-<div class="priority ok"><div class="ptag">All good</div><div class="ptitle">No New Emails</div><div class="pbody">No new messages from the coaching staff at this time.</div></div>
-<!-- AUTO:TODAY_END -->
+      <div class="card" style="text-align:center;padding:1.5rem 1rem;">
+        <div style="font-size:13px;color:var(--muted);">Checking for updates from Coach Corey and the team...</div>
+      </div>
+      <!-- AUTO:TODAY_END -->
     </div>
 
     <div class="stat-row">
@@ -581,8 +582,8 @@ function togglePlayer(el) {
 
 // Dynamically show/hide schedule rows based on today's date
 function updateScheduleDisplay() {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
   const upcomingRows = document.querySelectorAll('#upcoming-events .sched-row[data-date]');
   const pastContainer = document.getElementById('past-events');
@@ -590,26 +591,21 @@ function updateScheduleDisplay() {
   let movedAny = false;
 
   upcomingRows.forEach(row => {
-    const rowDate = new Date(row.getAttribute('data-date'));
-    rowDate.setHours(0, 0, 0, 0);
+    const parts = row.getAttribute('data-date').split('-');
+    const rowDate = new Date(parseInt(parts[0]), parseInt(parts[1])-1, parseInt(parts[2]));
     if (rowDate < today) {
-      // Update badge to Done
       const badge = row.querySelector('.badge');
       if (badge) { badge.className = 'badge home'; badge.textContent = 'Done'; }
-      // Remove uniform/map pills from past events
       const pillRow = row.querySelector('.pill-row');
       if (pillRow) pillRow.remove();
-      // Move to past section at the top
       pastContainer.insertBefore(row, pastContainer.firstChild);
       movedAny = true;
     } else if (rowDate.getTime() === today.getTime()) {
-      // Mark as Today
       const badge = row.querySelector('.badge');
       if (badge) { badge.className = 'badge next'; badge.textContent = 'Today'; }
     }
   });
 
-  // Show past section if there's anything in it
   if (movedAny || pastContainer.querySelectorAll('.sched-row').length > 0) {
     pastSection.style.display = 'block';
   }
