@@ -244,6 +244,7 @@
     <button class="tab" onclick="show('schedule',this)">Schedule</button>
     <button class="tab" onclick="show('roster',this)">Roster</button>
     <button class="tab" onclick="show('results',this)">Results</button>
+    <button class="tab" onclick="show('photos',this)">📸 Photos</button>
     <button class="tab" onclick="show('know',this)">Need to Know</button>
   </div>
 </header>
@@ -256,12 +257,10 @@
     <div class="section">
       <div class="section-label">Latest from Coach Corey</div>
       <!-- AUTO:TODAY_START -->
-<div class="priority urgent"><div class="ptag">Action needed</div><div class="ptitle">Snack Volunteer Needed – May 15 Practice</div><div class="pbody">Nobody has signed up to bring snacks for the May 15 practice at Legion Field (5:00 PM). Please volunteer as soon as possible so the kids are taken care of after practice! <a href="https://www.signupgenius.com/go/30E0C4EACAD2EA5FA7-63941492-baseball#/" target="_blank" style="color:#0f1f3d;font-weight:600;text-decoration:underline;">Sign up here →</a></div></div>
-<div class="priority info"><div class="ptag">Reminder</div><div class="ptitle">Lake City Classic Tournament – This Weekend!</div><div class="pbody">The Lake City Classic Tournament is coming up this Saturday and Sunday, May 16–17, in Acworth. Both days are all-day events. Uniform is white jersey + white pants. Stay tuned for game times and snack details – more info to come! <a href="https://www.signupgenius.com/go/30E0C4EACAD2EA5FA7-63941492-baseball#/" target="_blank" style="color:#0f1f3d;font-weight:600;text-decoration:underline;">Sign up here →</a></div></div>
-<div class="priority info"><div class="ptag">Reminder</div><div class="ptitle">Upcoming Practices This Week</div><div class="pbody">You have three practices ahead this week: Tuesday May 13 at Chuck Camp Park (5:00 PM), Wednesday May 14 at Hawkins Field (7:00 PM), and Thursday May 15 at Legion Field (5:00 PM). All practices are in grey pants + practice shirt. Come ready to work hard!</div></div>
-<div class="priority info"><div class="ptag">Reminder</div><div class="ptitle">Tonight's Practice – Already Underway</div><div class="pbody">Tonight's practice at Legion Field (5:00 PM) is already in progress. Snacks tonight are provided by Jackie Bennett. Great job stepping up, Jackie!</div></div>
-<div class="card" style="margin-top:1rem;"><div style="font-size:12px;color:var(--muted);margin-bottom:6px;">Coach Corey · May 11 at 9:34 PM</div><div style="font-size:14px;line-height:1.6;">"Keep grinding, boys – every rep in practice is building the champion inside you. Let's go into this tournament ready to show what Smyrna White is all about!"</div></div>
-<!-- AUTO:TODAY_END -->
+      <div class="card" style="text-align:center;padding:1.5rem 1rem;">
+        <div style="font-size:13px;color:var(--muted);">Checking for updates from Coach Corey and the team...</div>
+      </div>
+      <!-- AUTO:TODAY_END -->
     </div>
 
     <div class="stat-row">
@@ -604,6 +603,31 @@
     </div>
   </div>
 
+  <!-- PHOTOS -->
+  <div class="pane" id="pane-photos">
+    <br>
+    <div class="section">
+      <div class="section-label">Team photos</div>
+      <div class="card" style="text-align:center;padding:2rem 1.25rem;">
+        <div style="font-size:48px;margin-bottom:12px;">📸</div>
+        <div style="font-size:18px;font-weight:500;color:var(--text);margin-bottom:8px;">Smyrna White 8U — 2026</div>
+        <div style="font-size:13px;color:var(--text2);margin-bottom:24px;line-height:1.6;">View and add photos from practices and games. Anyone with this link can contribute — no account needed!</div>
+        <a href="https://photos.app.goo.gl/j9j2RdX6jDXv69gE6" target="_blank" style="display:inline-block;background:var(--navy);color:#fff;font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;padding:14px 32px;border-radius:8px;text-decoration:none;margin-bottom:12px;">📸 Open Photo Album</a>
+        <div style="font-size:12px;color:var(--muted);margin-top:16px;">Opens in Google Photos · Works on iPhone & Android</div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-label">How to add your photos</div>
+      <div class="card">
+        <div style="font-size:13px;color:var(--text);line-height:1.8;">
+          <div style="margin-bottom:8px;">📱 <strong>From your phone:</strong> Tap "Open Photo Album" above, then tap the + button to add photos directly from your camera roll.</div>
+          <div style="margin-bottom:8px;">🤳 <strong>After a game:</strong> Share your best shots — action photos, team celebrations, dugout moments — anything the whole team would enjoy seeing.</div>
+          <div>🔒 <strong>Private link:</strong> Only people with this link can see the album. It won't appear in public searches.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- NEED TO KNOW -->
   <div class="pane" id="pane-know">
     <br>
@@ -654,10 +678,22 @@
         <div class="kbody">Walk-up music is used at Braves Country tournaments. We need a volunteer to compile songs and manage playback during games. Raj confirmed an ION Pathfinder 280 speaker (100W, portable). A 30-second MP3 clip per player is ideal.</div>
       </div>
 
-      <div class="know pink">
+      <div class="know amber">
         <div class="ktag">Tournament Gear</div>
-        <div class="ktitle">Coordinating shared equipment for tournament days</div>
-        <div class="kbody">To avoid 11 families hauling the same stuff, we'll coordinate who brings what. Items needed include pop-up tents and portable fans for the dugout. A sign-up will go out closer to tournament time.</div>
+        <div class="ktitle">Lake City Classic — What's needed</div>
+        <div class="kbody">
+          <strong>Saturday May 16:</strong><br>
+          ✅ Cooler w/ ice/Gatorade & water — Keith Gaynor<br>
+          ✅ Saturday snack — Erika Avina<br>
+          ⚠️ Tents — 0 of 3 filled<br>
+          ⚠️ Portable fans — 0 of 3 filled<br><br>
+          <strong>Sunday May 17:</strong><br>
+          ⚠️ Cooler w/ ice & Gatorade & water — nobody signed up<br>
+          ⚠️ Sunday snacks — nobody signed up<br>
+          ⚠️ Tents — 0 of 3 filled<br>
+          ⚠️ Portable fans — 0 of 3 filled<br><br>
+          <a href="https://www.signupgenius.com/go/30E0C4EACAD2EA5FA7-64077075-lake" target="_blank" style="color:#0f1f3d;font-weight:600;">📋 Sign up for tournament gear →</a>
+        </div>
       </div>
 
       <div class="know purple">
